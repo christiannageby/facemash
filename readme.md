@@ -9,3 +9,6 @@ This project is made for educational purposes, to learn Python, Flask and the EL
 3. run facemash.py from the terminal
 ```
 The server will then run at http://127.0.0.1:80/ 
+
+### IMPORTANT:
+The program won't run if you don't have Python and Flask installed

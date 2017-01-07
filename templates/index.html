@@ -1,0 +1,72 @@
+<html>
+<head>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+        .head{
+            width: 100%;
+            height: 10vh;
+            background: #7B0000;
+        }
+        .head h1{
+            color: #fff;
+            line-height: 10vh;
+            text-align: center;
+            font-size: 50px;
+            font-family: sans-serif;
+        }
+        .middle{
+            width: 60%;
+            margin: auto;
+            height: 65vh;
+        }
+        .lg{
+            width: calc(45%);
+            float: left;
+            height: 65vh;
+        }
+        .lg img{
+            width: 100%;
+            max-height: 100%;
+            margin: auto auto;
+        }
+        .sm{
+            width: calc(10%);
+            float: left;
+            height: 55vh;
+            line-height: 55vh;
+        }
+
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}">
+</head>
+<body>
+    <div class="head">
+        <h1>Facemash</h1>
+    </div>
+    <h2>Were we let in for our looks? No. Will we be judged for them? Yes.</h2>
+    <h1>Who's hotter? Click to Choose.</h1>
+    <div class="middle">
+        <div class="lg">
+            <a href="/vote/{{data[0][0]}}/{{data[1][0]}}">
+                <img src="/static/images/{{data[0][1]}}">
+            </a>
+            <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{data[0][2]}} <i class="fa fa-thumbs-down" aria-hidden="true"></i> {{data[0][3]}} <b>chance to win: </b>{{ (1/(1 + 10 ** ((data[1][4]-data[0][4]) / 400)) *100 )}}%<br/>
+        </div>
+        <div class="sm">
+            OR
+        </div>
+        <div class="lg">
+            <a href="/vote/{{data[1][0]}}/{{data[0][0]}}">
+                <img src="/static/images/{{data[1][1]}}">
+            </a>
+            <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{data[1][2]}} <i class="fa fa-thumbs-down" aria-hidden="true"></i> {{data[1][3]}} <b>chance to win: </b>{{ (1/(1 + 10 ** ((data[0][4]-data[1][4]) / 400)) *100 )}}%<br/>
+        </div>
+    </div>
+<hr>
+<span onclick="alert('I DON\'T GIVE A FUCK ABOUT YOUR OPINION DMCA? Contact me at roland@loves.dickinhisan.us')">Do you find this website disturbing?</span>
+</body>
+</html>

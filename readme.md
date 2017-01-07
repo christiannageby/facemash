@@ -4,18 +4,20 @@ This project is made for educational purposes, to learn Python, Flask and the EL
 
 # Installation
 **Simple install**
+
 ```
-Run start.bat
-go to http://127.0.0.1:80/
+1. make a new folder in static/images/ and paste your images there
+2. Run start.bat
+3. go to http://127.0.0.1:80/
 ```
 
 **Advanced install**
 ```
 1. Fork this repocity
-2. add a folder called images in 'static/', then put your images in this folder
+2. make a new folder in 'static/' and name it 'images', and put your images here
 3. run facemash.py from the terminal
 ```
 The server will then run at http://127.0.0.1:80/ 
 
-### IMPORTANT:
-The program won't run if you not have Python and Flask installed
+## Troubleshooting
+If the application won't run, make shure you've installed Flask, if you don't know how to do it, follow [this](http://flask.pocoo.org/docs/0.12/installation/) tutorial 

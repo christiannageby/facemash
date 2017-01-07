@@ -3,6 +3,13 @@ I've developed a facemash clone in python with Flask as the webserver. No databa
 This project is made for educational purposes, to learn Python, Flask and the ELO-rating system.
 
 # Installation
+**Simple install**
+```
+Run start.bat
+go to http://127.0.0.1:80/
+```
+
+**Advanced install**
 ```
 1. Fork this repocity
 2. add a folder called images in 'static/', then put your images in this folder

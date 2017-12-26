@@ -52,7 +52,7 @@ def vote(id, idLoser):
 
 if __name__ == '__main__':
 
-    for file in os.listdir("C:/Users/Christian Nageby/PycharmProjects/fasemash/static/images"):
+    for file in os.listdir(os.getcwd()+"/static/images"):
         if file.endswith(".jpg"):
             print file + " appended..."
         images.append([file, 0, 0, 1200])

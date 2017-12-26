@@ -25,8 +25,8 @@ def vote(id, idLoser):
     images[int(id)][3] = images[int(id)][3] + (K * (1 - ea))
     images[int(idLoser)][3] = images[int(idLoser)][3] + (K * (0 - eb))
 
-    for i in range(5):
-        for j in range(4 - i):
+    for i in range(len(images)):
+        for j in range((len(images)-1) - i):
             if images[j][3] < images[j + 1][3]:
                 images[j], images[j + 1] = images[j + 1], images[j]
 #

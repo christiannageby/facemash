@@ -9,9 +9,28 @@ K = 32
 
 images = []
 
+def vote(id, idLoser):
+    # Convert inputs to ints
+    id = int(id)
+    idLoser = int(idLoser)
+
+    # Add one win to the winners win count ant adding one lost to the losers dislike counter
+    images[id][1] += 1
+    images[idLoser][2] += 1
+
+    ea = 1 / (1 + 10 ** ((images[idLoser][3] - images[int(id)][3]) / 400))
+    eb = 1 / (1 + 10 ** ((images[int(id)][3] - images[int(idLoser)][3]) / 400))
+
+    images[int(id)][3] = images[int(id)][3] + (K * (1 - ea))
+    images[int(idLoser)][3] = images[int(idLoser)][3] + (K * (0 - eb))
+
+    for i in range(5):
+        for j in range(4 - i):
+            if images[j][3] < images[j + 1][3]:
+                images[j], images[j + 1] = images[j + 1], images[j]
 #
 # index page, display to random candidates for judgemnet
-# Later: fixes Sort the array after smallest diffrence in elorank decending order
+# Later: fixes Sort the array after smallest diffrence in elorank decending order - Fixed
 #
 
 
@@ -24,38 +43,30 @@ def home():
     ])
 
 
-#
-# Define the vote route
-# usage /vote/WinnersIndex/LosersIndex
-#
+@app.route('/toplist')
+def toplist():
+    return render_template('toplist.html', data=[
+        [0, images[0][0], images[0][1], images[0][2], images[0][3]],
+        [1, images[1][0], images[1][1], images[1][2], images[1][3]]
+    ])
 
 
 @app.route('/vote/<id>/<idLoser>')
-def vote(id, idLoser):
-
-    # Convert inputs to ints
-    id = int(id)
-    idLoser = int(idLoser)
-
-    # Add one win to the winners win count ant adding one lost to the losers dislike counter
-    images[id][1] += 1
-    images[idLoser][2] += 1
-
-    ea = 1/(1 + 10 ** ((images[idLoser][3] - images[int(id)][3]) / 400))
-    eb = 1/(1 + 10 ** ((images[int(id)][3]-images[int(idLoser)][3]) / 400))
-
-    images[int(id)][3] = images[int(id)][3] + (K * (1 - ea))
-    images[int(idLoser)][3] = images[int(idLoser)][3] + (K * (0 - eb))
-
+def normal_vote(id, idLoser):
+    vote(id, idLoser)
     return redirect(url_for('home'))
 
+@app.route('/hottest-vote/<id>/<idLoser>')
+def hottestVote(id, idLoser):
+    vote(id, idLoser)
+    return redirect(url_for('toplist'))
 
 if __name__ == '__main__':
 
-    for file in os.listdir("C:/Users/Christian Nageby/PycharmProjects/fasemash/static/images"):
-        if file.endswith(".jpg"):
-            print file + " appended..."
-        images.append([file, 0, 0, 1200])
+    for file in os.listdir("static/images"):
+        if file.endswith(".jpg") or file.endswith(".png") or file.endswith(".jpeg"):
+            images.append([file, 0, 0, 1200])
+
     print images
 
 

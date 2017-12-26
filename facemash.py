@@ -2,6 +2,7 @@
 from flask import Flask, render_template, redirect, url_for
 import random
 import os
+import sys
 
 app = Flask(__name__)
 
@@ -70,4 +71,4 @@ if __name__ == '__main__':
     print images
 
 
-    app.run(port=85, host='127.0.0.1')
+    app.run(port=1337, host='127.0.0.1')

@@ -63,17 +63,10 @@ def hottestVote(id, idLoser):
 
 if __name__ == '__main__':
 
-<<<<<<< HEAD
     for file in os.listdir(os.getcwd()+"/static/images"):
         if file.endswith(".jpg"):
             print file + " appended..."
         images.append([file, 0, 0, 1200])
-=======
-    for file in os.listdir("static/images"):
-        if file.endswith(".jpg") or file.endswith(".png") or file.endswith(".jpeg"):
-            images.append([file, 0, 0, 1200])
-
->>>>>>> 4942bdb5986a697372aa8ac7d5b39a06916094c1
     print images
 
 

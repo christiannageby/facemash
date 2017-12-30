@@ -5,7 +5,7 @@ This project is made for educational purposes, to learn Python, Flask and the EL
 # Installation
 
 ```
-1. Fork this repocity
+1. Fork or clone this repocity
 2. make a new folder 'static/images' and put your images in it
 3. install flask via pip or easy_inastall
 4. run facemash.py from terminal

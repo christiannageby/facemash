@@ -3,3 +3,5 @@
 static/images/
 $RECYCLE.BIN/
 venv/
+*.db
+*sqlite

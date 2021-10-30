@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://A:/.idea/A.iml" filepath="A:/.idea/A.iml" />
-      <module fileurl="file://B://.idea/B.iml" filepath="B://.idea/B.iml" />
-    </modules>
-  </component>
-</project>

@@ -1,74 +1,82 @@
 #!flask/bin/python
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
 import random
 import os
 import sys
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+db = SQLAlchemy(app)
 
+class Persons(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    path = db.Column(db.String(), unique=True, nullable=False)
+    upvotes = db.Column(db.Integer(), nullable=False, default=0)
+    downvotes = db.Column(db.Integer(), nullable=False, default=0)
+    elo_rank = db.Column(db.Integer(), nullable=False, default=1200)
+
+    def __repr__(self):
+        return '<Person %r>' % self.id
 K = 32
 
-images = []
+def vote(winner: int, loser: int):
+    winner = Persons.query.filter_by(id=winner).first()
+    loser = Persons.query.filter_by(id=loser).first()
 
-def vote(id, idLoser):
-    # Convert inputs to ints
-    id = int(id)
-    idLoser = int(idLoser)
+    winner.upvotes += 1
+    loser.downvotes += 1
 
-    # Add one win to the winners win count ant adding one lost to the losers dislike counter
-    images[id][1] += 1
-    images[idLoser][2] += 1
+    ea = 1 / (1 + 10 ** ((loser.elo_rank - winner.elo_rank) / 400))
+    eb = 1 / (1 + 10 ** ((winner.elo_rank - loser.elo_rank) / 400))
 
-    ea = 1 / (1 + 10 ** ((images[idLoser][3] - images[int(id)][3]) / 400))
-    eb = 1 / (1 + 10 ** ((images[int(id)][3] - images[int(idLoser)][3]) / 400))
+    winner.elo_rank = winner.elo_rank + (K * (1 - ea))
+    loser.elo_rank = loser.elo_rank + (K * (0 - eb))
 
-    images[int(id)][3] = images[int(id)][3] + (K * (1 - ea))
-    images[int(idLoser)][3] = images[int(idLoser)][3] + (K * (0 - eb))
-
-    for i in range(len(images)):
-        for j in range((len(images)-1) - i):
-            if images[j][3] < images[j + 1][3]:
-                images[j], images[j + 1] = images[j + 1], images[j]
-#
-# index page, display to random candidates for judgemnet
-# Later: fixes Sort the array after smallest diffrence in elorank decending order - Fixed
-#
-
+    db.session.commit()
 
 @app.route('/')
 def home():
-    index = random.sample(range(0, len(images)), 2)
-    return render_template('index.html', data=[
-        [index[0], images[index[0]][0], images[index[0]][1], images[index[0]][2], images[index[0]][3]],
-        [index[1], images[index[1]][0], images[index[1]][1], images[index[1]][2], images[index[1]][3]]
-    ])
+    index = random.sample(range(1, len(Persons.query.all())), 2)
+    return render_template('index.html', contestants = [Persons.query.filter_by(id=index[0]).first_or_404(),Persons.query.filter_by(id=index[1]).first_or_404()])
 
+@app.route('/upload')
+def upload():
+    return render_template('upload.html')
 
-@app.route('/toplist')
-def toplist():
-    return render_template('toplist.html', data=[
-        [0, images[0][0], images[0][1], images[0][2], images[0][3]],
-        [1, images[1][0], images[1][1], images[1][2], images[1][3]]
-    ])
-
-
-@app.route('/vote/<id>/<idLoser>')
-def normal_vote(id, idLoser):
-    vote(id, idLoser)
+@app.route('/vote/<int:winner>/<int:loser>')
+def normal_vote(winner, loser):
+    vote(winner, loser)
     return redirect(url_for('home'))
 
-@app.route('/hottest-vote/<id>/<idLoser>')
-def hottestVote(id, idLoser):
-    vote(id, idLoser)
-    return redirect(url_for('toplist'))
+@app.route('/upload_image', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file:
+            filename = secure_filename(file.filename)
+            location = os.path.join("static/images/", filename)
+            file.save(location)
+            person = Persons(path=location, upvotes=0, downvotes=0, elo_rank=1200)
+            db.session.add(person)
+            db.session.commit()
+            return redirect(url_for('home', name=filename))
 
 if __name__ == '__main__':
-
-    for file in os.listdir(os.getcwd()+"/static/images"):
-        if file.endswith(".jpg"):
-            print file + " appended..."
-        images.append([file, 0, 0, 1200])
-    print images
+    #for file in os.listdir(os.getcwd()+"/static/images"):
+    #    person = Persons(path=file, upvotes=0, downvotes=0, elo_rank=1200)
+    #    db.session.add(person)
+    #    db.session.commit()
 
 
-    app.run(port=1337, host='127.0.0.1')
+    app.run(port=8888, host='127.0.0.1')

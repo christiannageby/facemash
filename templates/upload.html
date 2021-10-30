@@ -1,0 +1,25 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}">
+</head>
+<body>
+    <div class="head">
+        <h1>Facemash</h1>
+    </div>
+    <div class="links">
+        <a href="/" class="pull-right">Play the game</a>
+    </div>
+    <h1>Are you the hottest?</h1>
+    <h2>Upload a picture of yourself and see if you make it to the toplist</h2>
+    <div class="middle">
+        <form action="/upload_image" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <p>
+                <small>By uploading your image you hereby sell your soul to me.</small>
+            </p>
+            <input type="submit">
+        </form>
+    </div>
+</body>
+</html>

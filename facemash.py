@@ -21,7 +21,17 @@ class Persons(db.Model):
         return '<Person %r>' % self.id
 K = 32
 
-def vote(winner: int, loser: int):
+@app.route('/')
+def home() -> render_template:
+    index = random.sample(range(1, len(Persons.query.all())), 2)
+    return render_template('index.html', contestants = [Persons.query.filter_by(id=index[0]).first_or_404(),Persons.query.filter_by(id=index[1]).first_or_404()])
+
+@app.route('/upload')
+def upload() -> render_template:
+    return render_template('upload.html')
+
+@app.route('/vote/<int:winner>/<int:loser>')
+def vote(winner: int, loser: int) -> redirect:
     winner = Persons.query.filter_by(id=winner).first()
     loser = Persons.query.filter_by(id=loser).first()
 
@@ -35,23 +45,10 @@ def vote(winner: int, loser: int):
     loser.elo_rank = loser.elo_rank + (K * (0 - eb))
 
     db.session.commit()
-
-@app.route('/')
-def home():
-    index = random.sample(range(1, len(Persons.query.all())), 2)
-    return render_template('index.html', contestants = [Persons.query.filter_by(id=index[0]).first_or_404(),Persons.query.filter_by(id=index[1]).first_or_404()])
-
-@app.route('/upload')
-def upload():
-    return render_template('upload.html')
-
-@app.route('/vote/<int:winner>/<int:loser>')
-def normal_vote(winner, loser):
-    vote(winner, loser)
     return redirect(url_for('home'))
 
 @app.route('/upload_image', methods=['GET', 'POST'])
-def upload_file():
+def upload_file() -> redirect:
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -73,10 +70,4 @@ def upload_file():
             return redirect(url_for('home', name=filename))
 
 if __name__ == '__main__':
-    #for file in os.listdir(os.getcwd()+"/static/images"):
-    #    person = Persons(path=file, upvotes=0, downvotes=0, elo_rank=1200)
-    #    db.session.add(person)
-    #    db.session.commit()
-
-
     app.run(port=8888, host='127.0.0.1')

@@ -17,6 +17,12 @@ class Persons(db.Model):
     downvotes = db.Column(db.Integer(), nullable=False, default=0)
     elo_rank = db.Column(db.Integer(), nullable=False, default=1200)
 
+    def __init__(self, path: str):
+        self.upvotes = 0
+        self.downvotes = 0
+        self.elo_rank = 1200
+        self.path = path
+
     def __repr__(self):
         return '<Person %r>' % self.id
 K = 32
@@ -50,7 +56,7 @@ def vote(winner: int, loser: int) -> redirect:
 @app.route('/upload_image', methods=['GET', 'POST'])
 def upload_file() -> redirect:
     if request.method == 'POST':
-        # check if the post request has the file part
+        # if file is missing flash message
         if 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
@@ -60,11 +66,13 @@ def upload_file() -> redirect:
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
+
         if file:
             filename = secure_filename(file.filename)
             location = os.path.join("static/images/", filename)
             file.save(location)
-            person = Persons(path=location, upvotes=0, downvotes=0, elo_rank=1200)
+
+            person = Persons(path=location)
             db.session.add(person)
             db.session.commit()
             return redirect(url_for('home', name=filename))

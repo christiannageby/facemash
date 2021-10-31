@@ -59,24 +59,28 @@ def vote(winner: int, loser: int) -> redirect:
 
 @app.route('/upload_image', methods=['GET', 'POST'])
 def upload_file() -> redirect:
+    """Upload files to static/images and return a redirect """
     if request.method == 'POST':
-        # if file is missing flash message
+        # if there is no file in the request throw an error
         if 'file' not in request.files:
             return redirect(request.url)
         file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
+        # If the user does not select a file, the browser submits an empty file without a filename.
         if file.filename == '':
             return redirect(request.url)
-
+        # If a file is sent convert it to a secure filename
+        # TODO: Set it as a UUID16 or something
         if file:
             filename = secure_filename(file.filename)
+            # TODO: Remove hard coded path
             location = os.path.join("static/images/", filename)
             file.save(location)
 
+            # Insert the image in the database.
             person = Persons(path=location)
             db.session.add(person)
             db.session.commit()
+
             return redirect(url_for('home', name=filename))
 
 if __name__ == '__main__':

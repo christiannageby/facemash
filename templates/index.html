@@ -1,21 +1,12 @@
-<html>
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}">
-</head>
-<body>
-    <div class="head">
-        <h1>Facemash</h1>
-    </div>
-    <div class="links">
-        <a href="/upload" class="pull-right">Upload your image</a>
-    </div>
+{% extends 'base.html' %}
+
+{% block content %}
     <h2>Were we let in for our looks? No. Will we be judged for them? Yes.</h2>
     <h1>Who's hotter? Click to Choose.</h1>
     <div class="middle">
         <div class="lg">
             <a href="/vote/{{ contestants[0].id }}/{{ contestants[1].id }}">
-                <img src="/static/images/{{ contestants[0].path }}">
+                <img src="{{ contestants[0].path }}">
             </a>
             <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{contestants[0].upvotes}} <i class="fa fa-thumbs-down" aria-hidden="true"></i> {{contestants[0].downvotes}} <b>chance to win: </b>{{ (1/(1 + 10 ** ((contestants[1].elo_rank-contestants[0].elo_rank) / 400)) *100 )}}%<br/>
         </div>
@@ -24,10 +15,9 @@
         </div>
         <div class="lg">
             <a href="/vote/{{ contestants[1].id }}/{{ contestants[0].id }}">
-                <img src="/static/images/{{ contestants[1].path }}">
+                <img src="{{ contestants[1].path }}">
             </a>
             <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{contestants[1].upvotes}} <i class="fa fa-thumbs-down" aria-hidden="true"></i> {{contestants[1].downvotes}} <b>chance to win: </b>{{ (1/(1 + 10 ** ((contestants[0].elo_rank-contestants[1].elo_rank) / 400)) *100 )}}%<br/>
         </div>
     </div>
-</body>
-</html>
+{% endblock content %}

@@ -1,0 +1,15 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}">
+</head>
+<body>
+    <div class="head">
+        <h1>Facemash</h1>
+    </div>
+    <div class="links">
+        <a href="/upload" class="pull-right">Upload your image</a>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>

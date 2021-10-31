@@ -61,7 +61,6 @@ def upload_file() -> redirect:
     if request.method == 'POST':
         # if file is missing flash message
         if 'file' not in request.files:
-            flash('No file part')
             return redirect(request.url)
         file = request.files['file']
         # If the user does not select a file, the browser submits an

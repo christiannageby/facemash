@@ -2,12 +2,12 @@
 from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+import configparser
 import random
 import os
-import sys
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config.from_pyfile('config.py.sample')
 db = SQLAlchemy(app)
 
 class Persons(db.Model):

@@ -4,3 +4,4 @@ $RECYCLE.BIN/
 venv/
 *.db
 *sqlite
+config.py

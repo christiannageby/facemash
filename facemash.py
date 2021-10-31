@@ -45,6 +45,8 @@ def upload() -> render_template:
 
 @app.route('/vote/<int:winner>/<int:loser>')
 def vote(winner: int, loser: int) -> redirect:
+    """ The function for the vote, modify the users elo_rank by the correct formulas.
+        :returns a redirect"""
     # Fetch the winner and the looser from the database from the database by ID.
     winner: Persons = Persons.query.filter_by(id=winner).first()
     loser: Persons = Persons.query.filter_by(id=loser).first()

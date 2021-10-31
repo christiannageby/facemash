@@ -79,7 +79,7 @@ def upload_file() -> redirect:
         if file:
             filename = secure_filename(file.filename)
             # TODO: Remove hard coded path
-            location = os.path.join("static/images/", filename)
+            location = os.path.join(app.config['IMAGE_DIR'], filename)
             file.save(location)
 
             # Insert the image in the database.

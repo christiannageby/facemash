@@ -35,14 +35,15 @@ def home() -> render_template:
         return render_template('error.html', exception="Too few contestants in database to bee able to start the game.")
     except Exception as excp:
         return render_template('error.html', exception=excp)
+
 @app.route('/upload')
 def upload() -> render_template:
     return render_template('upload.html')
 
 @app.route('/vote/<int:winner>/<int:loser>')
 def vote(winner: int, loser: int) -> redirect:
-    winner = Persons.query.filter_by(id=winner).first()
-    loser = Persons.query.filter_by(id=loser).first()
+    winner: Persons = Persons.query.filter_by(id=winner).first()
+    loser: Persons = Persons.query.filter_by(id=loser).first()
 
     winner.upvotes += 1
     loser.downvotes += 1
@@ -66,7 +67,6 @@ def upload_file() -> redirect:
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            flash('No selected file')
             return redirect(request.url)
 
         if file:

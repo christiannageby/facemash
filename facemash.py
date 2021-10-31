@@ -29,9 +29,12 @@ K = 32
 
 @app.route('/')
 def home() -> render_template:
-    index = random.sample(range(1, len(Persons.query.all())), 2)
-    return render_template('index.html', contestants = [Persons.query.filter_by(id=index[0]).first_or_404(),Persons.query.filter_by(id=index[1]).first_or_404()])
-
+    try:
+        return render_template('index.html', contestants = random.sample(Persons.query.all(), 2))
+    except ValueError:
+        return render_template('error.html', exception="Too few contestants in database to bee able to start the game.")
+    except Exception as excp:
+        return render_template('error.html', exception=excp)
 @app.route('/upload')
 def upload() -> render_template:
     return render_template('upload.html')

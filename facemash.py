@@ -29,6 +29,8 @@ K = 32
 
 @app.route('/')
 def home() -> render_template:
+    """ Try to serve the main view if it fails due to ValueError catch it and serve a Too few contestants page instead
+        Else show a generic error template with the exception printed out."""
     try:
         return render_template('index.html', contestants = random.sample(Persons.query.all(), 2))
     except ValueError:
@@ -38,13 +40,15 @@ def home() -> render_template:
 
 @app.route('/upload')
 def upload() -> render_template:
+    """ Serve the upload page statically, this should not be able to fail. No try/catch needed for now."""
     return render_template('upload.html')
 
 @app.route('/vote/<int:winner>/<int:loser>')
 def vote(winner: int, loser: int) -> redirect:
+    # Fetch the winner and the looser from the database from the database by ID.
     winner: Persons = Persons.query.filter_by(id=winner).first()
     loser: Persons = Persons.query.filter_by(id=loser).first()
-
+    
     winner.upvotes += 1
     loser.downvotes += 1
 

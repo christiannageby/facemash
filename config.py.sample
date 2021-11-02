@@ -3,3 +3,4 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 DEBUG = True
 SECRET_KEY = '<KEY>'
 IMAGE_DIR = 'static/images'
+ALLOWED_FORMATS = {'png', 'jpg', 'jpeg', 'gif'}

@@ -63,6 +63,10 @@ def vote(winner: int, loser: int) -> redirect:
     db.session.commit()
     return redirect(url_for('home'))
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_FORMATS']
+
 @app.route('/upload_image', methods=['GET', 'POST'])
 def upload_file() -> redirect:
     """Upload files to static/images and return a redirect """
@@ -76,7 +80,7 @@ def upload_file() -> redirect:
             return redirect(request.url)
         # If a file is sent convert it to a secure filename
         # TODO: Set it as a UUID16 or something
-        if file:
+        if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             # TODO: Remove hard coded path
             location = os.path.join(app.config['IMAGE_DIR'], filename)

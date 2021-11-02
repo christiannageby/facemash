@@ -1,17 +1,10 @@
 # Facemash
-I've developed a facemash clone in python with Flask as the webserver. No database needed, the only problem is that the Elo ranking system will reset if you shut down the server.
-This project is made for educational purposes, to learn Python, Flask and the ELO-rating system.
+A clone of the facemash website from [The Social Network](https://www.imdb.com/title/tt1285016/) however there is no need to fetch the images from public webservers since there is an image upload function.
 
-# Installation
+## Disclaimer
+Regarding the aspect of morale and respect this application may provoke some, this is not the purpose. The solely intention of this application is to implement the ELO-ranking system in an easy and fun manner. 
 
-```
-1. Fork or clone this repocity
-2. make a new folder 'static/images' and put your images in it
-3. install flask via pip or easy_inastall
-4. run facemash.py from terminal
-```
-The server will then run at http://127.0.0.1:80/ 
+## Installation
+There is a few steps to be done to install the application first off you'll need to copy the configuration sample to config.py and set the correct parameters. Once it is done you may create the database, import db from facemash.py and issue the `db.create_all()` method. 
 
-
-## Troubleshooting
-* If the application won't run, make shure you've installed Flask, if you don't know how to do it, follow [this](http://flask.pocoo.org/docs/0.12/installation/) tutorial 
+Configure any uWGSI server to run the application or use the flask built in webserver to serve the webapp.

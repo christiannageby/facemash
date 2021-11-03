@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Toplist</h1>
+    <div class="middle">
+        <table class="toplist-table">
+            <thead>
+                <tr>
+                    <td>Image</td>
+                    <td>Rank</td>
+                    <td>Upvotes</td>
+                    <td>Downvotes</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in persons %}
+                <tr>
+                    <td class="toplist-table-image"><img src="{{ person.path }}" class="toplist-image"></td>
+                    <td>{{ person.elo_rank|round|int }}</td>
+                    <td><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ person.upvotes }}</td>
+                    <td><i class="fa fa-thumbs-down" aria-hidden="true"></i>{{ person.downvotes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

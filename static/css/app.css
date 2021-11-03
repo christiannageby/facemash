@@ -46,3 +46,17 @@ body{
     height: 55vh;
     line-height: 55vh;
 }
+
+.toplist-image{
+    width: 80px;
+    height: 80px;
+}
+.toplist-table{
+    width: 100%;
+}
+.toplist-table, td{
+    width: 200px;
+}
+.toplist-table-image{
+    width: 80px;
+}

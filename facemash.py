@@ -38,6 +38,14 @@ def home() -> render_template:
     except Exception as excp:
         return render_template('error.html', exception=excp)
 
+@app.route('/toplist')
+def toplist() -> render_template:
+    all_persons = Persons.query.order_by(Persons.elo_rank.desc()).all()
+    if len(all_persons) > 1:
+        return render_template('toplist.html', persons=all_persons)
+    else:
+        return render_template('error.html', exception="Not enough contestants to display the toplist")
+
 @app.route('/upload')
 def upload() -> render_template:
     """ Serve the upload page statically, this should not be able to fail. No try/catch needed for now."""

@@ -15,7 +15,7 @@ class Persons(db.Model):
     path = db.Column(db.String(), unique=True, nullable=False)
     upvotes = db.Column(db.Integer(), nullable=False, default=0)
     downvotes = db.Column(db.Integer(), nullable=False, default=0)
-    elo_rank = db.Column(db.Integer(), nullable=False, default=1200)
+    elo_rank = db.Column(db.Float(), nullable=False, default=1200)
 
     def __init__(self, path: str):
         self.upvotes = 0
@@ -62,8 +62,8 @@ def vote(winner: int, loser: int) -> redirect:
     winner.upvotes += 1
     loser.downvotes += 1
 
-    ea = 1 / (1 + 10 ** ((loser.elo_rank - winner.elo_rank) / 400))
-    eb = 1 / (1 + 10 ** ((winner.elo_rank - loser.elo_rank) / 400))
+    ea: float = 1 / (1 + 10 ** ((loser.elo_rank - winner.elo_rank) / 400))
+    eb: float = 1 / (1 + 10 ** ((winner.elo_rank - loser.elo_rank) / 400))
 
     winner.elo_rank = winner.elo_rank + (K * (1 - ea))
     loser.elo_rank = loser.elo_rank + (K * (0 - eb))
@@ -90,7 +90,6 @@ def upload_file() -> redirect:
         # TODO: Set it as a UUID16 or something
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            # TODO: Remove hard coded path
             location = os.path.join(app.config['IMAGE_DIR'], filename)
             file.save(location)
 
@@ -101,5 +100,3 @@ def upload_file() -> redirect:
 
             return redirect(url_for('home', name=filename))
 
-#if __name__ == '__main__':
-#    app.run(port=8888, host='127.0.0.1')

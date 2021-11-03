@@ -101,5 +101,5 @@ def upload_file() -> redirect:
 
             return redirect(url_for('home', name=filename))
 
-if __name__ == '__main__':
-    app.run(port=8888, host='127.0.0.1')
+#if __name__ == '__main__':
+#    app.run(port=8888, host='127.0.0.1')
